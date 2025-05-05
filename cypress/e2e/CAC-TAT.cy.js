@@ -234,12 +234,12 @@ it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', 
 })
 
 
-it('testando e2e testing', () =>{
+it.only('testando e2e testing', () =>{
 cy.fillMandatoryFieldsAndSubmit()
 
 })
 
-it('verifica que a política abre em outra aba sem a necessidade de um clique', () => {
+it.only('verifica que a política abre em outra aba sem a necessidade de um clique', () => {
 cy.contains('a', 'Política de Privacidade')
 .should('have.attr', 'href', 'privacy.html')
 .and('have.attr', 'target', '_blank')
