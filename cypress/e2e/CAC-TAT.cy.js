@@ -2,6 +2,8 @@
 
 //const { it } = require("node:test");
 
+
+
 describe('Central de Atendimento ao Cliente TAT', () => { //set the test suit
 
    beforeEach(() => {
@@ -14,7 +16,7 @@ describe('Central de Atendimento ao Cliente TAT', () => { //set the test suit
 
     it('Preenche os campos obrigatórios e envia o formulário', () => { 
     const longText = Cypress._.repeat('test' ,10)
-
+cy.clock()
     cy.get('[name="firstName"]')
       .as('Nome')
       .should('be.visible')
@@ -58,35 +60,27 @@ describe('Central de Atendimento ao Cliente TAT', () => { //set the test suit
       .as('sucesso')
       .should('be.visible')
       cy.get('@sucesso')
-      .should('be.visible');
+      .should('be.visible')
+      cy.tick(3000)
 
 
 
   })
   
-  /*
-  it.only('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => { 
-    // runs after each test block
-    cy.get('#email')
-    .type('test@test.com')
-    cy.get('button[type="submit"]').click()
-    cy.get('.success')
-    .should('not.visible')
-    cy.get('.error')
-    .should('be.visible')
+  
+  it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => { 
+   cy.clock()
+    cy.contains('button', 'Enviar').click()
+    cy.get('.error').should('be.visible')
+    cy.tick(3000)
+    cy.get('.error').should('not.be.visible')
+
+    
   })
-  /*
-/*
-  it.only('testar campo telefone somente números', () => {
+  
 
-    cy.get('#phone')
-    .type('test')
-    .should('have.value', '')
+ 
 
-
-
-  })
-*/
 
 
  it('preenche e limpa os campos nome, sobrenome, email e telefone', () => {
@@ -111,26 +105,10 @@ describe('Central de Atendimento ao Cliente TAT', () => { //set the test suit
 })
 
   
-    
-
-
-  //it.only('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
-   //cy.get('button[type="submit"]').click()
-  //cy.get('.error')
-  //.should('be.visible')
-
   
-  //})
 
 it('envia o formuário com sucesso usando um comando customizado', () => {
-/*
-  const data = {
-firstName: 'Denner',
-lastName: 'Santana',
-email: 'denner@test.com',
-phone: '123456789'
-}
-*/
+
 
 cy.fillMandatoryFieldsAndSubmit()
 cy.get('.success').should('be.visible')
@@ -262,5 +240,84 @@ cy.contains('h1', 'CAC TAT - Política de Privacidade').should('be.visible')
 
 })
 */
+
+it('exibe mensagem por 3 segundos', function ()  {
+cy.clock()
+cy.get('#firstName').should('be.visible')
+.type('test')
+.should('have.value', 'test')
+cy.tick(3000)
+Cypress._.times(3, () => {
+console.log('Hello Cypress')
+
+})
+
+
+
+
+})
+
+it('exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
+  cy.get('.success')
+    .should('not.be.visible')
+    .invoke('show')
+    .should('be.visible')
+    .and('contain', 'Mensagem enviada com sucesso.')
+    .invoke('hide')
+    .should('not.be.visible')
+  cy.get('.error')
+    .should('not.be.visible')
+    .invoke('show')
+    .should('be.visible')
+    .and('contain', 'Valide os campos obrigatórios!')
+    .invoke('hide')
+    .should('not.be.visible')
+   
+})
+
+it('preenche o campo da área de texto usando o comando invoke', () => {
+  cy.get('#open-text-area')
+  .should('be.visible')
+  .invoke('val', 'texto test')
+  .should('have.value', 'texto test')
+  
+})
+
+
+it('faz uma requisição HTTP', () => {
+cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
+.as('request message')
+.its('status').should('be.eql', 200)
+cy.get('@request message')
+.its('statusText')
+.should('be.eql', 'OK')
+
+
+
+})
+
+
+it('find the cat', () => {
+  cy.get('#cat')
+  .invoke('show')
+  .should('be.visible')
+
+
+  
+
+  
+
+
+
+  /*
+  cy.get('.error')
+    .should('not.be.visible')
+    .invoke('show')
+    .should('be.visible')
+    .and('contain', 'Valide os campos obrigatórios!')
+
+  */
+
+})
 
 })
